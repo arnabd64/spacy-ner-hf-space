@@ -1,8 +1,14 @@
-from spacy_functions import CONFIG, tokenizer, named_entity_recognition, parts_of_speech
-import gradio as gr
-import spacy
 import sys
 
+import gradio as gr
+import spacy
+import yaml
+
+from spacy_functions import (named_entity_recognition, parts_of_speech,
+                             tokenizer)
+
+with open("config.yaml", "r") as cfg:
+    CONFIG = yaml.load(cfg, yaml.SafeLoader)
 
 with gr.Blocks() as Tokenizer:
     with gr.Row():
