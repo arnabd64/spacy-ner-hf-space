@@ -9,3 +9,8 @@ entities:
   - PERSON
   - EVENT
   - ORG
+
+tab_names:
+  - Tokenizer
+  - Parts of Speech
+  - Named Entity Recognition

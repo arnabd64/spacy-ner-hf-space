@@ -15,9 +15,11 @@ with open("config.yaml", "r") as fp:
 def tokenizer(text: str):
     return [token.text for token in FAST_MODEL(text)]
 
+def _process(text: str, model_name: str):
+    return FAST_MODEL(text) if model_name == "fast" else ACCURATE_MODEL(text)
+
 def parts_of_speech(text: str, model_name: str):
-    model = FAST_MODEL if model_name == "fast" else ACCURATE_MODEL
-    doc = model(text)
+    doc = _process(text, model_name)
     return DataFrame.from_dict({
         "token": [token.text for token in doc],
         "pos": [token.pos_ for token in doc]
@@ -31,8 +33,7 @@ def _ner(doc: spacy.tokens.Doc):
     ]
 
 def named_entity_recognition(text: str, model_name: str, filters: List[Optional[str]] = []):
-    model = FAST_MODEL if model_name == "fast" else ACCURATE_MODEL
-    doc = model(text)
+    doc = _process(text)
     tokens = [token for token, ent in _ner(doc) if ent not in filters]
     ents = [ent for _, ent in _ner(doc) if ent not in filters]
     return DataFrame.from_dict({"tokens": tokens, "entities": ents})
