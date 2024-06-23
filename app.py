@@ -1,11 +1,11 @@
 import gradio as gr
 from tokenizer import tokenizer
 from parts_of_speech import parts_of_speech
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
+from ner import ner
 
-iface_list = [tokenizer, parts_of_speech]
-tab_names = ["Tokenizer", "Parts of Speech"]
+
+iface_list = [tokenizer, parts_of_speech, ner]
+tab_names = ["Tokenizer", "Parts of Speech", "Named Entity Recognition"]
 
 assert len(iface_list) == len(tab_names)
 

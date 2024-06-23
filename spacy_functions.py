@@ -1,10 +1,15 @@
-# from typing import List, Optional
+from typing import List, Optional
 import spacy
 from pandas import DataFrame
+import warnings
+
+import spacy.tokens
+warnings.filterwarnings("ignore", category=UserWarning)
 
 ALLOWED_MODELS = ["fast", "accurate"]
 ACCURATE_MODEL = spacy.load("en_core_web_trf")
 FAST_MODEL = spacy.load("en_core_web_sm")
+ENTITIES = {"CARDINAL", "PERSON", "ORG", "DATE", "GPE", "EVENT"}
 
 
 
@@ -19,10 +24,16 @@ def parts_of_speech(text: str, model_name: str):
         "pos": [token.pos_ for token in doc]
     })
 
-# def named_entity_recognition(text: str, model_name: str, filters: List[Optional[str]] = []):
-#     model = load_model(model_name)
-#     return [
-#         token.ent_type_
-#         for token in model(text)
-#         if token.ent_type_ not in filters
-#     ]
+def _ner(doc: spacy.tokens.Doc):
+    return [
+        (token.text, token.ent_type_)
+        for token in doc
+        if not token.ent_type_ == ""
+    ]
+
+def named_entity_recognition(text: str, model_name: str, filters: List[Optional[str]] = []):
+    model = FAST_MODEL if model_name == "fast" else ACCURATE_MODEL
+    doc = model(text)
+    tokens = [token for token, ent in _ner(doc) if ent not in filters]
+    ents = [ent for _, ent in _ner(doc) if ent not in filters]
+    return DataFrame.from_dict({"tokens": tokens, "entities": ents})

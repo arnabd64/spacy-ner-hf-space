@@ -26,7 +26,7 @@ with gr.Blocks() as parts_of_speech:
                     submit = grc.Button("Tag Parts of Speech")
 
                 with gr.Column():
-                    grc.ClearButton([text_input, model])
+                    grc.ClearButton([text_input])
 
         with gr.Column(elem_id="tokens-output"):
             tokens_list = grc.DataFrame(label="Tokens Found")
