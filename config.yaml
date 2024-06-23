@@ -1,0 +1,11 @@
+allowed_models:
+  - fast
+  - accurate
+
+entities:
+  - CARDINAL
+  - GPE
+  - DATE
+  - PERSON
+  - EVENT
+  - ORG

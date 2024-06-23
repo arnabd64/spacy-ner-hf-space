@@ -1,22 +1,23 @@
 import gradio as gr
-from tokenizer import tokenizer
-from parts_of_speech import parts_of_speech
-from ner import ner
+import pages
+import pages.ner
+import pages.parts_of_speech
+import pages.tokenizer
 
-
-iface_list = [tokenizer, parts_of_speech, ner]
 tab_names = ["Tokenizer", "Parts of Speech", "Named Entity Recognition"]
+ifaces = [
+    pages.tokenizer.Tokenizer,
+    pages.parts_of_speech.PartsOfSpeech,
+    pages.ner.NamedEntityRecognition
+]
 
-assert len(iface_list) == len(tab_names)
+assert len(ifaces) == len(tab_names)
 
 app = gr.TabbedInterface(
-    interface_list = iface_list,
+    interface_list = ifaces,
     tab_names = tab_names,
     title = "Spacy Token Classifer"
 )
 
 if __name__ == "__main__":
-    app.launch(
-        server_port=7860,
-        server_name = "0.0.0.0"
-    )
+    app.launch()

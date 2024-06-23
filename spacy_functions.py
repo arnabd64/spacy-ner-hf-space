@@ -2,16 +2,15 @@ from typing import List, Optional
 import spacy
 from pandas import DataFrame
 import warnings
-
+import yaml
 import spacy.tokens
 warnings.filterwarnings("ignore", category=UserWarning)
 
-ALLOWED_MODELS = ["fast", "accurate"]
 ACCURATE_MODEL = spacy.load("en_core_web_trf")
 FAST_MODEL = spacy.load("en_core_web_sm")
-ENTITIES = {"CARDINAL", "PERSON", "ORG", "DATE", "GPE", "EVENT"}
 
-
+with open("config.yaml", "r") as fp:
+    CONFIG = yaml.load(fp, yaml.SafeLoader)
 
 def tokenizer(text: str):
     return [token.text for token in FAST_MODEL(text)]
