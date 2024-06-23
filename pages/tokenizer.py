@@ -19,4 +19,4 @@ with gr.Blocks() as Tokenizer:
             gr.Markdown("__Tokens Found__:")
             tokens_list = gr.JSON()
 
-    submit.click(tokenizer, [text_input], tokens_list, queue=True)
+    submit.click(tokenizer, [text_input], tokens_list)

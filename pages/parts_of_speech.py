@@ -4,18 +4,13 @@ from spacy_functions import CONFIG, parts_of_speech
 with gr.Blocks() as PartsOfSpeech:
     with gr.Row():
         with gr.Column():
+            gr.Markdown("__Enter your Text__:")
             with gr.Row():
-                text_input = gr.Textbox(
-                    label = "Enter your Text",
-                    value = "The five boxing wizards jump quickly."
-                )
+                text_input = gr.Textbox()
             
+            gr.Markdown("__Choose Language Model__:")
             with gr.Row():
-                model = gr.Radio(
-                    choices = CONFIG['allowed_models'],
-                    value = CONFIG['allowed_models'][0],
-                    label = "Choose language model"
-                )
+                model = gr.Radio(choices=CONFIG['allowed_model'], value=CONFIG['allowed_models'][0])
             
             with gr.Row():
                 with gr.Column():
@@ -25,10 +20,7 @@ with gr.Blocks() as PartsOfSpeech:
                     gr.ClearButton([text_input])
 
         with gr.Column():
-            tokens_list = gr.DataFrame(label="Tokens Found")
+            gr.Markdown("__Tokens Found__")
+            tokens_list = gr.DataFrame()
 
-    submit.click(
-        parts_of_speech,
-        inputs=[text_input, model],
-        outputs=tokens_list
-    )
+    submit.click(parts_of_speech, [text_input, model], tokens_list)
