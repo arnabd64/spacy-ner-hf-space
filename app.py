@@ -1,10 +1,9 @@
 import gradio as gr
-from pages import Tokenizer, PartsOfSpeech, NamedEntityRecognition
+from pages import interfaces
 from spacy_functions import CONFIG
 
-ifaces = [Tokenizer, PartsOfSpeech, NamedEntityRecognition]
 
-app = gr.TabbedInterface(ifaces, CONFIG['tab_names'], title="Spacy Token Classification")
+app = gr.TabbedInterface(interfaces, CONFIG['tab_names'], title="Spacy Token Classification")
 
 
 if __name__ == "__main__":

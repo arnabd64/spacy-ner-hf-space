@@ -1,5 +1,8 @@
 from spacy_functions import CONFIG, tokenizer, named_entity_recognition, parts_of_speech
 import gradio as gr
+import spacy
+import sys
+
 
 with gr.Blocks() as Tokenizer:
     with gr.Row():
@@ -67,8 +70,20 @@ with gr.Blocks() as NamedEntityRecognition:
                 with gr.Column():
                     gr.ClearButton([text_input, filters])
 
-        gr.Markdown("__Entities Found__:")
         with gr.Column():
+            gr.Markdown("__Entities Found__:")
             entity_list = gr.DataFrame()
 
     submit.click(named_entity_recognition, [text_input, model, filters], entity_list)
+
+with gr.Blocks() as About:
+    gr.Markdown("## About")
+    gr.Markdown("* Author: [arnabdhar](https://hf.co/arnabdhar)")
+    gr.Markdown("* Author's GitHub: [arnabd64](https://github.com/arnabd64)")
+
+    gr.Markdown("## Package versions")
+    gr.Markdown(f"* Python: {sys.version}")
+    gr.Markdown(f"* Spacy: {spacy.__version__}")
+    gr.Markdown(f"* Gradio: {gr.__version__}")
+
+interfaces = [Tokenizer, PartsOfSpeech, NamedEntityRecognition, About]
