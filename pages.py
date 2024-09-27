@@ -1,45 +1,42 @@
 import sys
 
 import gradio as gr
+import gradio.components as gc
 import spacy
-import yaml
 
-from spacy_functions import (named_entity_recognition, parts_of_speech,
-                             tokenizer)
+import src.functions as f
 
-with open("config.yaml", "r") as cfg:
-    CONFIG = yaml.load(cfg, yaml.SafeLoader)
+
+ModelChooser = lambda: gc.Radio(list(f.ModelCatalogue.keys()), label="Choose You Model")
+TextInput = lambda: gc.Textbox(label="Enter your Text:")
+
 
 with gr.Blocks() as Tokenizer:
     with gr.Row():
         with gr.Column():
-            gr.Markdown("__Enter your Text__:")
             with gr.Row():
-                text_input = gr.Textbox()
+                text_input = TextInput()
             
             with gr.Row():
                 with gr.Column():
-                    submit = gr.Button("Tokenize")
+                    submit = gc.Button("Tokenize")
 
                 with gr.Column():
-                    gr.ClearButton([text_input])
+                    gc.ClearButton([text_input])
 
         with gr.Column():
-            gr.Markdown("__Tokens Found__:")
-            tokens_list = gr.JSON()
+            tokens_list = gc.JSON(label="Tokens Found")
 
-    submit.click(tokenizer, [text_input], tokens_list)
+    submit.click(f.tokenizer, [text_input], tokens_list)
 
 with gr.Blocks() as PartsOfSpeech:
     with gr.Row():
         with gr.Column():
-            gr.Markdown("__Enter your Text__:")
             with gr.Row():
-                text_input = gr.Textbox()
+                text_input = TextInput()
             
-            gr.Markdown("__Choose Language Model__:")
             with gr.Row():
-                model = gr.Radio(CONFIG['allowed_models'], value=CONFIG['allowed_models'][0])
+                model = ModelChooser()
             
             with gr.Row():
                 with gr.Column():
@@ -49,25 +46,21 @@ with gr.Blocks() as PartsOfSpeech:
                     gr.ClearButton([text_input])
 
         with gr.Column():
-            gr.Markdown("__Tokens Found__")
-            tokens_list = gr.DataFrame()
+            tokens_list = gc.DataFrame(label="Tokens Found")
 
-    submit.click(parts_of_speech, [text_input, model], tokens_list)
+    submit.click(f.partsOfSpeech, [text_input, model], tokens_list)
 
 with gr.Blocks() as NamedEntityRecognition:
     with gr.Row():
         with gr.Column():
-            gr.Markdown("__Enter your Text__:")
             with gr.Row():
-                text_input = gr.Textbox()
+                text_input = TextInput()
 
-            gr.Markdown("__Choose Language Model__:")
             with gr.Row():
-                model = gr.Radio(CONFIG['allowed_models'], value=CONFIG['allowed_models'][0])
+                model = ModelChooser()
                 
-            gr.Markdown("__Choose Entities to Hide__:")
             with gr.Row():
-                filters = gr.CheckboxGroup(CONFIG['entities'])
+                filters = gr.CheckboxGroup(f.Entities, label="Entities to Hide:")
 
             with gr.Row():
                 with gr.Column():
@@ -77,10 +70,9 @@ with gr.Blocks() as NamedEntityRecognition:
                     gr.ClearButton([text_input, filters])
 
         with gr.Column():
-            gr.Markdown("__Entities Found__:")
-            entity_list = gr.DataFrame()
+            entity_list = gc.DataFrame(label="Entities Found")
 
-    submit.click(named_entity_recognition, [text_input, model, filters], entity_list)
+    submit.click(f.namedEntityRecognition, [text_input, model, filters], entity_list)
 
 with gr.Blocks() as About:
     gr.Markdown("## About")
@@ -92,4 +84,9 @@ with gr.Blocks() as About:
     gr.Markdown(f"* Spacy: {spacy.__version__}")
     gr.Markdown(f"* Gradio: {gr.__version__}")
 
-interfaces = [Tokenizer, PartsOfSpeech, NamedEntityRecognition, About]
+Interfaces = {
+    "Tokenizer": Tokenizer,
+    "Parts of Speech": PartsOfSpeech,
+    "Named Entity Recognition": NamedEntityRecognition,
+    "About":  About
+}

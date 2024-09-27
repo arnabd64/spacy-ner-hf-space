@@ -1,8 +1,8 @@
 import gradio as gr
 
-from pages import CONFIG, interfaces
+from pages import Interfaces
 
-app = gr.TabbedInterface(interfaces, CONFIG['tab_names'], title="Spacy Token Classification")
+app = gr.TabbedInterface(list(Interfaces.values()), list(Interfaces.keys()), title="Spacy Token Classification")
 
 
 if __name__ == "__main__":
