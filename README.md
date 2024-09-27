@@ -33,9 +33,9 @@ The final application has been deployed on [Huggingface Spaces](https://huggingf
 ## Packages used
 
 ```
-spacy==3.7.5
+spacy==3.7.6
 spacy-transformers==1.3.5
-gradio==4.36
+gradio==4.44
 ```
 
 Spacy provides a ton of language models, but we have restricted ouselves to `en_core_web_sm` and `en_core_web_trf` language models. `en_core_web_sm` model is optimized for CPU and low latency but sacrifices accuracy in complex scenarios whereas `en_core_web_trf` uses transformer based models thus is optimized for accuracy and sacrifices speed and low latency.
